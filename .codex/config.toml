@@ -1,0 +1,40 @@
+[features]
+codex_hooks = true
+
+[[hooks.PreToolUse]]
+matcher = "Bash"
+
+[[hooks.PreToolUse.hooks]]
+type = "command"
+command = ".claude/hooks/block-non-bun-package-managers.sh"
+statusMessage = "Checking package manager"
+
+[[hooks.PreToolUse.hooks]]
+type = "command"
+command = ".claude/hooks/block-emojis.sh"
+statusMessage = "Checking emoji policy"
+
+[[hooks.PostToolUse]]
+matcher = "Edit|Write"
+
+[[hooks.PostToolUse.hooks]]
+type = "command"
+command = "bun fix --skip=correctness/noUnusedImports"
+statusMessage = "Running Ultracite fix"
+
+[[hooks.PostToolUse.hooks]]
+type = "command"
+command = ".claude/hooks/run-lint.sh"
+statusMessage = "Running lint"
+
+[[hooks.PostToolUse.hooks]]
+type = "command"
+command = ".claude/hooks/run-typecheck.sh"
+statusMessage = "Running typecheck"
+
+[[hooks.Stop]]
+
+[[hooks.Stop.hooks]]
+type = "command"
+command = ".claude/hooks/run-build.sh"
+statusMessage = "Running build"

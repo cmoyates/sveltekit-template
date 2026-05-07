@@ -37,7 +37,7 @@ It also configures explicit save actions for:
 
 Pre-wired for **Claude Code** (`.claude/`) and **OpenAI Codex CLI** (`.codex/`).
 
-Claude hooks run `bun fix --skip=correctness/noUnusedImports` after file edits so generated code follows the same Ultracite formatting and linting rules.
+Claude and Codex hooks run `bun fix --skip=correctness/noUnusedImports` after file edits so generated code follows the same Ultracite formatting and linting rules.
 
 Skills live in both `.agents/` and `.claude/` (Claude Code doesn't inherit from `.agents/`), preloaded with:
 

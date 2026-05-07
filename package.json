@@ -35,6 +35,7 @@
     "start": "PORT=8080 bun run ./build",
     "prepare": "husky",
     "check": "ultracite check",
+    "typecheck": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "format": "ultracite fix",
     "lint": "ultracite check",

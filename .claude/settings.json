@@ -1,14 +1,47 @@
 {
   "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": ".claude/hooks/block-non-bun-package-managers.sh",
+            "type": "command"
+          },
+          {
+            "command": ".claude/hooks/block-emojis.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      }
+    ],
     "PostToolUse": [
       {
         "hooks": [
           {
             "command": "bun fix --skip=correctness/noUnusedImports",
             "type": "command"
+          },
+          {
+            "command": ".claude/hooks/run-lint.sh",
+            "type": "command"
+          },
+          {
+            "command": ".claude/hooks/run-typecheck.sh",
+            "type": "command"
           }
         ],
         "matcher": "Write|Edit"
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": ".claude/hooks/run-build.sh",
+            "type": "command"
+          }
+        ]
       }
     ]
   }
