@@ -1,17 +1,10 @@
-import Root, {
-	type ButtonProps,
-	type ButtonSize,
-	type ButtonVariant,
-	buttonVariants,
-} from "./button.svelte";
-
+// biome-ignore lint/performance/noBarrelFile: shadcn-svelte components expose this public import surface.
 export {
-	Root,
-	type ButtonProps as Props,
-	//
-	Root as Button,
-	buttonVariants,
-	type ButtonProps,
-	type ButtonSize,
-	type ButtonVariant,
-};
+  type ButtonProps,
+  type ButtonProps as Props,
+  type ButtonSize,
+  type ButtonVariant,
+  buttonVariants,
+  default as Button,
+  default as Root,
+} from "./button.svelte";
