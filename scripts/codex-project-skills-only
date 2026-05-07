@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+set -u
+set -o pipefail
+
+ignoredSkillsDirs=(
+  "${HOME}/.agents/skills"
+  "${HOME}/.codex/skills"
+  "${HOME}/.opencode/skills"
+  "${HOME}/.config/opencode/skills"
+)
+
+existingIgnoredSkillsDirs=()
+for skillsDir in "${ignoredSkillsDirs[@]}"; do
+  if [[ -d "$skillsDir" ]]; then
+    existingIgnoredSkillsDirs+=("$skillsDir")
+  fi
+done
+
+if [[ "${#existingIgnoredSkillsDirs[@]}" -eq 0 ]]; then
+  exec codex "$@"
+fi
+
+configOverride="$(
+  find "${existingIgnoredSkillsDirs[@]}" -name SKILL.md -type f -print0 |
+    python3 -c '
+import json
+import sys
+
+raw = sys.stdin.buffer.read()
+paths = [
+    path.decode("utf-8", errors="surrogateescape")
+    for path in raw.split(b"\0")
+    if path
+]
+
+if not paths:
+    raise SystemExit(0)
+
+items = ",".join(
+    "{path=" + json.dumps(path) + ",enabled=false}"
+    for path in paths
+)
+print("skills.config=[" + items + "]")
+'
+)"
+
+if [[ -z "$configOverride" ]]; then
+  exec codex "$@"
+fi
+
+count="$(
+  printf '%s\n' "$configOverride" |
+    python3 -c '
+import sys
+
+print(sys.stdin.read().count("enabled=false"))
+'
+)"
+
+echo "Starting Codex with ${count} user-level skill(s) disabled for this invocation only." >&2
+exec codex -c "$configOverride" "$@" --yolo
